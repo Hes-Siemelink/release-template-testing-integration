@@ -1,0 +1,108 @@
+# JSON Schema: https://raw.githubusercontent.com/digital-ai/release-api/main/synthetic-type-definitions/type-definition-schema.json
+#
+# Yaml-based format to define types in Release, as an alternative to synthetic.xml or type-definitions.xml
+# This format is in Tech Preview in Release 23.3 and may change in future versions.
+#
+# You can also use synthetic.xml or type-definitions.xml to define types. Note that contents of the two files
+# are merged. This means that you can't have the same type definition in both
+# type-definitions.yaml and synthetic.xml or type-definitions.xml at the same time.
+
+types:
+
+  # All tasks in this project extend the BaseTask.
+  # Defines the container image location and color/icon for all tasks
+  containerExamples.BaseTask:
+    extends: xlrelease.ContainerTask
+    virtual: true
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+      iconLocation: test.png
+      taskColor: "#667385"
+
+  # All scripts in this project extend the BaseScript.
+  containerExamples.BaseScript:
+    extends: xlrelease.RemoteScriptExecution
+    virtual: true
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+
+    output-properties:
+      commandResponse:
+        kind: map_string_string
+
+  # Simple example task.
+  # The Python SDK will look for a corresponding Python class called 'Hello'
+  containerExamples.Hello:
+    extends: containerExamples.BaseTask
+    description: "Simple greeter task"
+
+    input-properties:
+      yourName:
+        description: The name to greet
+        kind: string
+        default: World
+
+    output-properties:
+      greeting:
+        kind: string
+
+
+  # Example task that interacts with the Release API
+  containerExamples.SetSystemMessage:
+    extends: containerExamples.BaseTask
+    description: Simple API task
+
+    input-properties:
+      message:
+        description: This message will appear as a banner in the Release UI. Admin access required.
+        kind: string
+
+
+  # Example task that interacts with a third-aprty server
+  containerExamples.ServerQuery:
+    extends: containerExamples.BaseTask
+    description: Simple API task
+
+    input-properties:
+      server:
+        kind: ci
+        referenced-type: containerExamples.Server
+      productId:
+        kind: string
+        default: 123
+
+    output-properties:
+      productName:
+        kind: string
+      productBrand:
+        kind: string
+
+
+  # Example server definition
+  containerExamples.Server:
+    extends: configuration.BasicAuthHttpConnection
+
+    properties:
+      # Overrides 'url' property to give it a default value and a new description
+      url:
+        default: https://dummyjson.com
+        description: A Dummy JSON server
+        required: true
+
+    hidden-properties:
+      testConnectionScript: containerExamples.TestConnection
+
+  # Example test connection script
+  containerExamples.TestConnection:
+    extends: containerExamples.BaseScript
+
+    input-properties:
+      server:
+        kind: ci
+        referenced-type: containerExamples.Server

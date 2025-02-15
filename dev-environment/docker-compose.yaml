@@ -1,0 +1,55 @@
+services:
+
+  digitalai-release:
+    build: digitalai-release
+    ports:
+      - "5516:5516"
+    environment:
+      - ADMIN_PASSWORD=admin
+      - ACCEPT_EULA=Y
+      - SERVER_URL=http://host.docker.internal:5516
+
+  digitalai-release-setup:
+    build: digitalai-release-setup
+    depends_on:
+      - digitalai-release
+    command: ["apply", "-v", "-f", "/data/instance-configuration.yaml"]
+    volumes:
+      - ./digitalai-release-setup:/data:ro
+
+  digitalai-release-remote-runner:
+    build: digitalai-release-remote-runner
+    depends_on:
+      - digitalai-release-setup
+    environment:
+      - RELEASE_RUNNER_RELEASE_URL=${RELEASE_RUNNER_RELEASE_URL}
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp:/tmp
+
+  container-registry:
+    image: registry:2
+    ports:
+      - "5050:5000"
+    volumes:
+      - .:/var/lib/registry
+
+  container-registry-ui:
+    image: joxit/docker-registry-ui:latest
+    ports:
+      - "8086:80"
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Digital.ai Release Docker Registry UI
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://container-registry:5000
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+    depends_on:
+      - container-registry
