@@ -11,7 +11,7 @@ types:
 
   # All tasks in this project extend the BaseTask.
   # Defines the container image location and color/icon for all tasks
-  containerExamples.BaseTask:
+  testing.BaseTask:
     extends: xlrelease.ContainerTask
     virtual: true
 
@@ -22,87 +22,40 @@ types:
       iconLocation: test.png
       taskColor: "#667385"
 
-  # All scripts in this project extend the BaseScript.
-  containerExamples.BaseScript:
-    extends: xlrelease.RemoteScriptExecution
-    virtual: true
+  # The Python SDK will look for a corresponding Python class called 'TestTemplate'
+  testing.TestTemplate:
+    extends: testing.BaseTask
+    description: "Runs a template in test mode"
 
-    hidden-properties:
-      image:
-        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
-        transient: true
+    input-properties:
+      templateName:
+        description: Name of the template that will be tested
+        kind: string
+
+      releaseId:
+        label: Reference Release ID
+        description: ID of a completed release that will be used to take the output properties
+          for mock tasks
+
+      mockType:
+        label: Task type to mock
+        description: |
+          The type of task to replace, for example `deploy.Deploy`. 
+          Tasks of this types will be replaced with a mock script that sets the output values
+          based on a previous actual release.
+        
+  testing.EchoAndWait:
+    extends: testing.BaseTask
+    label: Echo and wait
+    description: "Puts input into output and waits a while"
+
+    input-properties:
+      input:
+        description: The text that will be put in the output
+      delay:
+        description: Time in seconds to wait
+        kind: integer
 
     output-properties:
-      commandResponse:
-        kind: map_string_string
-
-  # Simple example task.
-  # The Python SDK will look for a corresponding Python class called 'Hello'
-  containerExamples.Hello:
-    extends: containerExamples.BaseTask
-    description: "Simple greeter task"
-
-    input-properties:
-      yourName:
-        description: The name to greet
-        kind: string
-        default: World
-
-    output-properties:
-      greeting:
-        kind: string
-
-
-  # Example task that interacts with the Release API
-  containerExamples.SetSystemMessage:
-    extends: containerExamples.BaseTask
-    description: Simple API task
-
-    input-properties:
-      message:
-        description: This message will appear as a banner in the Release UI. Admin access required.
-        kind: string
-
-
-  # Example task that interacts with a third-aprty server
-  containerExamples.ServerQuery:
-    extends: containerExamples.BaseTask
-    description: Simple API task
-
-    input-properties:
-      server:
-        kind: ci
-        referenced-type: containerExamples.Server
-      productId:
-        kind: string
-        default: 123
-
-    output-properties:
-      productName:
-        kind: string
-      productBrand:
-        kind: string
-
-
-  # Example server definition
-  containerExamples.Server:
-    extends: configuration.BasicAuthHttpConnection
-
-    properties:
-      # Overrides 'url' property to give it a default value and a new description
-      url:
-        default: https://dummyjson.com
-        description: A Dummy JSON server
-        required: true
-
-    hidden-properties:
-      testConnectionScript: containerExamples.TestConnection
-
-  # Example test connection script
-  containerExamples.TestConnection:
-    extends: containerExamples.BaseScript
-
-    input-properties:
-      server:
-        kind: ci
-        referenced-type: containerExamples.Server
+      output:
+        description: The value from `input`.

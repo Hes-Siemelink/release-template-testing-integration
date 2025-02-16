@@ -1,0 +1,52 @@
+apiVersion: xl-release/v1
+kind: Templates
+metadata:
+  home: Testing framework
+spec:
+- template: Template to test
+  phases:
+  - phase: Phase 1
+    tasks:
+    - name: Do something
+      type: xlrelease.ScriptTask
+      script: print "Do something"
+    - name: "Call external dependency #1"
+      type: testing.EchoAndWait
+      capabilities:
+      - remote
+      input: Test call 1
+      delay: 1
+    - name: Do something else
+      type: xlrelease.ScriptTask
+      script: print "Do something else"
+    color: "#3d6c9e"
+  - phase: Phase 2
+    tasks:
+    - name: Do something
+      type: xlrelease.ScriptTask
+      script: print "Do something"
+    - name: "Call external dependency #2"
+      type: testing.EchoAndWait
+      capabilities:
+      - remote
+      input: Test call 2
+      delay: 1
+    - name: Do something else
+      type: xlrelease.ScriptTask
+      script: print "Do something else"
+    color: "#498500"
+  - phase: Phase 3
+    tasks:
+    - name: Do something
+      type: xlrelease.ScriptTask
+      script: print "Do something"
+    - name: "Call external dependency #3"
+      type: testing.EchoAndWait
+      capabilities:
+      - remote
+      input: Test call 3
+      delay: 1
+    - name: Do something else
+      type: xlrelease.ScriptTask
+      script: print "Do something else"
+    color: "#991c71"
