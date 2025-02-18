@@ -1,0 +1,9 @@
+apiVersion: xl-release/v1
+kind: Release
+spec:
+  name: Test release from xl cli
+  template: Test framework/Test Runner for Templates
+  variables:
+    templateId: Acme-Backend Deploy Pipeline
+    mockType: deploy.Deploy
+    automated: true
