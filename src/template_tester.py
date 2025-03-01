@@ -33,6 +33,12 @@ class TestTemplate(BaseTask):
         task_index = 0
         print(f"Tasks in release:\n{all_tasks}")
 
+        # Get metadata
+        # FIXME getting 401s on this call
+        # metadata = self.get_default_api_client().call_api(f"/api/v1/metadata/types/{mock_type}", "GET", header_params={
+        #         'accept': 'application/json'
+        # })
+
         # Copy template into this release and replace certain tasks with mocks
         for phase in base_template.phases:
             phase = convert_floats_to_ints(phase)

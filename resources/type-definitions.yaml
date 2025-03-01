@@ -59,3 +59,38 @@ types:
     output-properties:
       output:
         description: The value from `input`.
+
+  # BaseTask for PythonScript
+  testing.BaseTaskJython:
+    extends: xlrelease.PythonScript
+    virtual: true
+
+    hidden-properties:
+      iconLocation:
+        default: test.png
+        hidden: true
+
+  testing.TestTemplateJython:
+    extends: testing.BaseTaskJython
+    label: Test Template (Jython)
+    description: "Runs a template in test mode"
+
+    hidden-properties:
+      scriptLocation: testing/TestTemplateJython.jy
+
+    input-properties:
+      templateName:
+        description: Name of the template that will be tested
+        kind: string
+
+      releaseId:
+        label: Reference Release ID
+        description: ID of a completed release that will be used to take the output properties
+          for mock tasks
+
+      mockType:
+        label: Task type to mock
+        description: |
+          The type of task to replace, for example `deploy.Deploy`. 
+          Tasks of this types will be replaced with a mock script that sets the output values
+          based on a previous actual release.

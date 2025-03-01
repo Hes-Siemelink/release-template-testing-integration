@@ -1,0 +1,52 @@
+from com.xebialabs.xlrelease.api.v1.forms import Variable
+
+
+baseTemplate = releaseApi.searchReleasesByTitle(templateName)[0]
+referenceRelease = releaseApi.getRelease(releaseId)
+
+def find_all_tasks(refRel):
+  tasks = []
+  for phase in refRel.phases:
+    for task in phase.tasks:
+      tasks.append(task)
+  return tasks
+
+def find_task_by_type(all, type, startIndex):
+  for i in range(startIndex, len(all)):
+    if all[i].type.toString() == type:
+      return all[i], i + 1
+
+  raise Exception("Task not found after index %s" % startIndex)
+
+def create_mock_script(original):
+
+  # mock = original.pythonScript.getOuputProperties().toString()
+
+  # XXX Getting the output variable is hardcoded now, should be a proper lookup
+  return "releaseVariables['result'] = '%s'" %original.getProperty('output')
+
+# Reference list of previously run tasks, as a flat list for simpler lookup
+allTasks = find_all_tasks(referenceRelease)
+taskIndex = 0
+
+# Copy variables.
+# XXX Make this work
+for variable in releaseApi.getVariables(referenceRelease.id):
+  # print "type: %s; contents: %s" % (type(variable), variable)
+  formVar = Variable(variable.type.toString(), variable.key, variable.getValue(), variable.requiresValue)
+  releaseApi.createVariable(release.id, formVar)
+
+# Copy template into this release and replace certain tasks with mocks
+for phase in baseTemplate.phases:
+  print "PHASE" + phase.title
+  addedPhase = phaseApi.addPhase(release.id, phase)
+  for task in phase.tasks:
+
+    if task.type.toString() == mockType:
+      mockTask = taskApi.newTask('xlrelease.ScriptTask')
+      mockTask.title = "MOCK " + task.title
+      original, taskIndex = find_task_by_type(allTasks, mockType, taskIndex)
+      mockTask.script = create_mock_script(original)
+      taskApi.addTask(addedPhase.id, mockTask)
+    else:
+      taskApi.addTask(addedPhase.id, task)
