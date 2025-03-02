@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 def find_all_tasks(refRel):
   tasks = []
   for phase in refRel.phases:
@@ -37,11 +39,11 @@ def get_output_properties(task):
 #
 
 def print_code(title, code):
-  print "### {0}".format(title)
-  print "```"
-  print "Release:{0}".format(code)
-  print "```"
-  print ""
+  print("### {0}".format(title))
+  print("```")
+  print("Release:{0}".format(code))
+  print("```")
+  print("")
 
 def remove_prefix_suffix(s, prefix="${", suffix="}"):
   """Removes a given prefix and suffix from a string.

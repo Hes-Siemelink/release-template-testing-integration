@@ -3,7 +3,7 @@ kind: Templates
 metadata:
   home: Testing framework
 spec:
-- template: Template to test
+- template: Sample Template to test
   phases:
   - phase: Phase 1
     tasks:
@@ -12,6 +12,8 @@ spec:
       script: print "Do something"
     - name: "Call external dependency #1"
       type: testing.EchoAndWait
+      variableMapping:
+        output: "${result}"
       capabilities:
       - remote
       input: Test call 1
@@ -27,6 +29,8 @@ spec:
       script: print "Do something"
     - name: "Call external dependency #2"
       type: testing.EchoAndWait
+      variableMapping:
+        output: "${result}"
       capabilities:
       - remote
       input: Test call 2
@@ -42,6 +46,8 @@ spec:
       script: print "Do something"
     - name: "Call external dependency #3"
       type: testing.EchoAndWait
+      variableMapping:
+        output: "${final_result}"
       capabilities:
       - remote
       input: Test call 3
@@ -50,3 +56,16 @@ spec:
       type: xlrelease.ScriptTask
       script: print "Do something else"
     color: "#991c71"
+  variables:
+  - type: xlrelease.StringVariable
+    key: result
+    requiresValue: false
+    showOnReleaseStart: false
+    label: Output
+    description: The value from `input`.
+  - type: xlrelease.StringVariable
+    key: final_result
+    requiresValue: false
+    showOnReleaseStart: false
+    label: Output
+    description: The value from `input`.
