@@ -1,0 +1,27 @@
+from com.xebialabs.xlrelease.api.v1.forms import Variable
+from testing import *
+
+# Get the full release objects
+target_release = releaseApi.getRelease(targetReleaseId)
+reference_release = releaseApi.getRelease(referenceReleaseId)
+
+# Reference list of previously run tasks, as a flat list for simpler lookup
+all_tasks = find_all_tasks(reference_release)
+task_index = 0
+
+# Scan target release and replace certain tasks with mocks
+for phase in target_release.phases:
+
+  for task in phase.tasks:
+
+    if task.type.toString() == mockType:
+
+      print_code("Output properties in {0}".format(task.title), get_output_properties(task))
+      print_code("Variables in {0}".format(task.title), task.variableMapping)
+
+      mock_task = taskApi.changeTaskType(task.id, 'xlrelease.ScriptTask')
+      mock_task.title = "MOCK " + task.title
+      original, task_index = find_task_by_type(all_tasks, mockType, task_index)
+      mock_task.script = create_mock_script(task, original)
+
+      taskApi.updateTask(mock_task)

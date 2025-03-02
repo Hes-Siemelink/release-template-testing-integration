@@ -94,3 +94,27 @@ types:
           The type of task to replace, for example `deploy.Deploy`. 
           Tasks of this types will be replaced with a mock script that sets the output values
           based on a previous actual release.
+
+  testing.ReplaceTasksWithMocks:
+    extends: testing.BaseTaskJython
+    label: Replace tasks with mocks
+    description: "Replaces tasks of a certain type with mock tasks"
+
+    hidden-properties:
+      scriptLocation: testing/ReplaceTasksWithMocks.jy
+
+    input-properties:
+      targetReleaseId:
+        description: ID of the release that will be modified
+        kind: string
+
+      referenceReleaseId:
+        label: Reference Release ID
+        description: ID of a completed release that will be used as a reference for the mock task output
+
+      mockType:
+        label: Task type to mock
+        description: |
+          The type of task to replace, for example `deploy.Deploy`. 
+          Tasks of this types will be replaced with a mock script that sets the output values
+          based on a previous actual release.
