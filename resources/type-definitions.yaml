@@ -20,7 +20,7 @@ types:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
       iconLocation: test.png
-      taskColor: "#667385"
+      taskColor: "#498500"
 
   # The Python SDK will look for a corresponding Python class called 'TestTemplate'
   testing.TestTemplate:
@@ -66,6 +66,7 @@ types:
     virtual: true
 
     hidden-properties:
+      taskColor: "#498500"
       iconLocation:
         default: test.png
         hidden: true
@@ -101,7 +102,7 @@ types:
     description: "Replaces tasks of a certain type with mock tasks"
 
     hidden-properties:
-      scriptLocation: testing/ReplaceTasksWithMocks.jy
+      scriptLocation: testing/MockReleaseAndStart.jy
 
     input-properties:
       targetReleaseId:

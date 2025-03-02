@@ -1,0 +1,35 @@
+apiVersion: xl-release/v1
+kind: Templates
+metadata:
+  home: Testing framework
+spec:
+- template: Tester with Create Release Task
+  phases:
+  - phase: Test template
+    tasks:
+    - name: Create mock release
+      type: xlrelease.CreateReleaseTask
+      newReleaseTitle: "Test run for ${release.title}"
+      startRelease: false
+      createdReleaseId: "${targetRelease}"
+      template: Testing framework/Template to test
+    - name: Change release and start
+      type: testing.ReplaceTasksWithMocks
+      targetReleaseId: "${targetRelease}"
+      mockType: testing.EchoAndWait
+    - name: Wait for mock release
+      type: xlrelease.GateTask
+      owner: admin
+      dependencies:
+      - type: xlrelease.Dependency
+        targetId: "${targetRelease}"
+    - name: OK?
+      type: xlrelease.GateTask
+    color: "#3d6c9e"
+  variables:
+  - type: xlrelease.StringVariable
+    key: targetRelease
+    requiresValue: false
+    showOnReleaseStart: false
+  scriptUsername: admin
+  scriptUserPassword: admin
