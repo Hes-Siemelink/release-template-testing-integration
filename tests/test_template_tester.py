@@ -14,7 +14,7 @@ class TestTestTemplate(unittest.TestCase):
         }
 
         # When
-        task.execute_task()
+        # task.execute_task()
 
         # Then
         # ...

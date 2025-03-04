@@ -1,0 +1,5 @@
+apiVersion: xl-release/v1
+kind: Release
+spec:
+  name: Automated test release
+  template: Testing framework/Template Test Runner

@@ -3,7 +3,7 @@ kind: Templates
 metadata:
   home: Testing framework
 spec:
-- template: Tester for Templates
+- template: Template Test Runner
   phases:
   - phase: Test template
     tasks:
@@ -23,9 +23,6 @@ spec:
       dependencies:
       - type: xlrelease.Dependency
         targetId: "${targetRelease}"
-    - name: OK?
-      type: xlrelease.GateTask
-      owner: admin
     color: "#3d6c9e"
   variables:
   - type: xlrelease.StringVariable
