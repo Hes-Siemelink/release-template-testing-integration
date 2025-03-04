@@ -16,9 +16,15 @@ def find_task_by_type(all, type, startIndex):
 
 def create_mock_script(template_task, executed_task):
 
+  print("### Task: {0}".format(template_task.title))
   script = ""
   for output_property in get_output_properties(template_task):
+    print("Output property: {0}".format(output_property))
+
     variable = template_task.variableMapping[output_property]
+    print("Variable: {0}".format(variable))
+
+    if not variable: continue
     variable_name = remove_prefix_suffix(variable)
     script +=  "releaseVariables['{0}'] = '{1}'".format(variable_name, executed_task.getProperty(output_property))
     script += "\n"
@@ -41,7 +47,7 @@ def get_output_properties(task):
 def print_code(title, code):
   print("### {0}".format(title))
   print("```")
-  print("Release:{0}".format(code))
+  print("{0}".format(code))
   print("```")
   print("")
 

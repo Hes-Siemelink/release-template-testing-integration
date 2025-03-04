@@ -25,6 +25,7 @@ spec:
         targetId: "${targetRelease}"
     - name: OK?
       type: xlrelease.GateTask
+      owner: admin
     color: "#3d6c9e"
   variables:
   - type: xlrelease.StringVariable

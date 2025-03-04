@@ -119,3 +119,9 @@ types:
           The type of task to replace, for example `deploy.Deploy`. 
           Tasks of this types will be replaced with a mock script that sets the output values
           based on a previous actual release.
+
+      startRelease:
+        label: Start release
+        description: If true, the target release will be started after the mock tasks are created
+        kind: boolean
+        default: true
