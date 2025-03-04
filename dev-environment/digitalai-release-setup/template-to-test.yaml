@@ -29,8 +29,6 @@ spec:
       script: print "Do something"
     - name: "Call external dependency #2"
       type: testing.EchoAndWait
-      variableMapping:
-        output: "${result}"
       capabilities:
       - remote
       input: Test call 2

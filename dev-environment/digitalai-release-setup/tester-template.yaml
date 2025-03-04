@@ -3,7 +3,7 @@ kind: Templates
 metadata:
   home: Testing framework
 spec:
-- template: Tester with Create Release Task
+- template: Tester for Templates
   phases:
   - phase: Test template
     tasks:
@@ -12,7 +12,7 @@ spec:
       newReleaseTitle: "Test run for ${release.title}"
       startRelease: false
       createdReleaseId: "${targetRelease}"
-      template: Testing framework/Template to test
+      template: Testing framework/Sample Template to test
     - name: Change release and start
       type: testing.ReplaceTasksWithMocks
       targetReleaseId: "${targetRelease}"
