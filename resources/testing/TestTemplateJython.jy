@@ -1,6 +1,10 @@
 from com.xebialabs.xlrelease.api.v1.forms import Variable
 from testing import *
 
+# Approach where the tempalte to be tested is copied into the current release
+# XXX Abandoning this for now in favor of MockReleaseAndStart that uses the
+# CreateReleaseTask to create a new release and then modifies it
+
 baseTemplate = releaseApi.searchReleasesByTitle(templateName)[0]
 referenceRelease = releaseApi.getRelease(releaseId)
 
